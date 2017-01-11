@@ -38,8 +38,11 @@ void Main::doWork()
 
     IplImage *img = imAcqGetImg(imAcq);
     Mat grey(img->height, img->width, CV_8UC1);
-    cvtColor(cv::Mat(img), grey, CV_BGR2GRAY);
-
+    #if CV_MAJOR_VERSION == 3
+        cvtColor(cvarrToMat(img), grey, CV_BGR2GRAY);
+    #else
+        cvtColor(cv::Mat(img), grey, CV_BGR2GRAY);
+    #endif 
     tld->detectorCascade->imgWidth = grey.cols;
     tld->detectorCascade->imgHeight = grey.rows;
     tld->detectorCascade->imgWidthStep = grey.step;
@@ -105,12 +108,21 @@ void Main::doWork()
                 break;
             }
 
+#if CV_MAJOR_VERSION == 3
+            cvtColor(cvarrToMat(img), grey, CV_BGR2GRAY);
+#else
             cvtColor(cv::Mat(img), grey, CV_BGR2GRAY);
+#endif
+
         }
 
         if(!skipProcessingOnce)
         {
-            tld->processImage(img);
+            #if CV_MAJOR_VERSION == 3
+                tld->processImage(cvarrToMat(img));
+            #else
+                tld->processImage(cv::Mat(img));
+            #endif
         }
         else
         {
