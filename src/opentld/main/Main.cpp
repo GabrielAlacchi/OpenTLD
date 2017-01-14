@@ -38,7 +38,7 @@ void Main::doWork()
 
     IplImage *img = imAcqGetImg(imAcq);
     Mat grey(img->height, img->width, CV_8UC1);
-    #if CV_MAJOR_VERSION == 3
+    #if CV_MAJOR_VERSION >= 3
         cvtColor(cvarrToMat(img), grey, CV_BGR2GRAY);
     #else
         cvtColor(cv::Mat(img), grey, CV_BGR2GRAY);
@@ -108,7 +108,7 @@ void Main::doWork()
                 break;
             }
 
-#if CV_MAJOR_VERSION == 3
+#if CV_MAJOR_VERSION >= 3
             cvtColor(cvarrToMat(img), grey, CV_BGR2GRAY);
 #else
             cvtColor(cv::Mat(img), grey, CV_BGR2GRAY);
@@ -118,7 +118,7 @@ void Main::doWork()
 
         if(!skipProcessingOnce)
         {
-            #if CV_MAJOR_VERSION == 3
+            #if CV_MAJOR_VERSION >= 3
                 tld->processImage(cvarrToMat(img));
             #else
                 tld->processImage(cv::Mat(img));
